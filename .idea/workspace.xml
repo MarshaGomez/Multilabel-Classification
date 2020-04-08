@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7673144-c8ad-4d51-912f-014721c7e314" name="Default Changelist" comment="" />
+    <list default="true" id="a7673144-c8ad-4d51-912f-014721c7e314" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spider.py" beforeDir="false" afterPath="$PROJECT_DIR$/spider.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,15 +12,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/parser$spider.coverage" NAME="spider Coverage Results" MODIFIED="1586349022985" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/parser$spider.coverage" NAME="spider Coverage Results" MODIFIED="1586374834315" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="210">
+              <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
               <folding>
                 <element signature="e#1#20#0" expanded="true" />
               </folding>
@@ -37,6 +40,15 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>pd</find>
+      <find>cat</find>
+      <find>catlist</find>
+      <find>Art</find>
+      <find>crum</find>
+      <find>categor</find>
+      <find>art</find>
+      <find>Arts</find>
+      <find>category</find>
+      <find>Special</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -50,10 +62,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="33" />
     <option name="y" value="23" />
-    <option name="width" value="1469" />
-    <option name="height" value="908" />
+    <option name="width" value="1680" />
+    <option name="height" value="965" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -132,23 +143,25 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1586348523666</updated>
-      <workItem from="1586348526194" duration="322000" />
+      <workItem from="1586348526194" duration="3221000" />
+      <workItem from="1586352774792" duration="2300000" />
+      <workItem from="1586373500120" duration="1012000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="322000" />
+    <option name="totallyTimeSpent" value="6533000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="33" y="23" width="1469" height="908" extended-state="0" />
+    <frame x="0" y="23" width="1680" height="965" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49603623" visible="true" weight="0.0960056" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49603623" visible="true" weight="0.08485959" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.50396377" side_tool="true" weight="0.09076262" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.64285713" weight="0.4642857" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.64285713" visible="true" weight="0.4284078" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4785177" weight="0.398641" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -171,10 +184,13 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/titles.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/spider.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="210">
+          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
           <folding>
             <element signature="e#1#20#0" expanded="true" />
           </folding>
