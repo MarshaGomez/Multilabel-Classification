@@ -15,7 +15,7 @@ from link_harvester import category
 
 # Clean Description attribute. Apply Stopwords and Stem
 def cleanDescription(description):
-    description = description.getText().lower() 
+    description = description.lower()
     description = re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", description)
     description = re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(description))
 
@@ -46,38 +46,33 @@ def cleanDescription(description):
 
 def getText(soup):
     tex=soup.find_all("div", {"class": "step"})
-    tex = [cleanDescription(it) for it in tex]
+    tex = [cleanDescription(it.getText()) for it in tex]
     
     return " ".join(tex)
-    # tex= [re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", it) for it in tex]
-    #tex=[re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(it)) for it in tex]
 
 
 
- # ([^a-zA-Z\\s+\\w]|\\s+)  description = re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(description))
 
 def parsePage(url):
 
     html_text = requests.get("https://www.wikihow.com"+url).text
     soup=BeautifulSoup(html_text, 'html.parser')
-    title=soup.find_all("a", {"href": "https://www.wikihow.com"+url})[1].getText()
-    print(title)
-    summary = soup.find("div", {"id": "mf-section-0"}).getText().lower()
-    summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
-    summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
+    title=soup.find_all("a", {"href": "https://www.wikihow.com"+url}, id=False)
 
-    print(summary)
-   # summary=soup.find("div", {"id": "mf-section-0"}).getText().lower().replace("[","").replace("]","").replace("x\nresearch source","")\
-       # .replace("(","").replace(")","").replace(".","").replace(",","")
-    text=getText(soup)
-    print(text)
-    #rows.append( [title,summary, text])
+    if title!=[] and len(title)==1:
+        print(title[0].getText())
+        summary = soup.find("div", {"id": "mf-section-0"}).getText().lower()
+        summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
+        summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
+        cleanDescription(summary)
+        print(summary)
+        text=getText(soup)
+        print(text)
 
 def manageUrls(links):
     print("TODO")
-    rows=[]
     [parsePage(url) for url in links]
-   # [print(url) for url in rows]
+
 def parseCat(url):
     html_text = requests.get(url).text
     soup=BeautifulSoup(html_text, 'html.parser')
