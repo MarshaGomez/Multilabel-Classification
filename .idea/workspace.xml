@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7673144-c8ad-4d51-912f-014721c7e314" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/spider.py" beforeDir="false" afterPath="$PROJECT_DIR$/spider.py" afterDir="false" />
-    </list>
+    <list default="true" id="a7673144-c8ad-4d51-912f-014721c7e314" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,12 +222,12 @@
       <workItem from="1586552525873" duration="1277000" />
       <workItem from="1586589186075" duration="2822000" />
       <workItem from="1586592474198" duration="4789000" />
-      <workItem from="1586609325466" duration="2760000" />
+      <workItem from="1586609325466" duration="2896000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34285000" />
+    <option name="totallyTimeSpent" value="34421000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
