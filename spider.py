@@ -6,7 +6,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-
+from link_harvester import category
 
 def getText(soup):
     tex=soup.find_all("div", {"class": "step"})
@@ -29,11 +29,24 @@ def parsePage(url):
     summary=soup.find("div", {"id": "mf-section-0"}).getText().lower()
     text=getText(soup)
     return [title,summary, text]
+def parseCat(url):
+    html_text = requests.get(url).text
+    soup=BeautifulSoup(html_text, 'html.parser')
+    li = soup.find_all("div", {"class": "responsive_thumb"})
+    links = [div.find('a')['href'] for div in li]
+    [print(it) for it in links]
+
 
 if __name__ == '__main__':
-    category_csv= ['arts-and-entertainment', 'family-life', 'hobbies-and-crafts', 'pets-and-animals', 'travel', 'cars-%26-other-vehicles', 'finance-and-business', 'holidays-and-traditions', 'philosophy-and-religion', 'work-world', 'computers-and-electronics', 'food-and-entertaining', 'home-and-garden', 'relationships', 'youth', 'education-and-communications', 'health', 'personal-care-and-style', 'sports-and-fitness']
-
-    category="Sports-and-Fitness"
-    result=parsePage("https://www.wikihow.com/Teach-Kids-To-Run-Faster")
-    print(result[2])
-
+    print("for cat in category:")
+    print("open cat.txt")
+    print("for each subcat, get page and save to cvs")
+    cat=category[0]
+    with open('./texts/' + cat + '.txt', 'r') as fp:
+        line = fp.readline()
+        cnt = 1
+        while line:
+            result=parseCat("https://www.wikihow.com"+line)
+            line = fp.readline()
+            cnt += 1
+        fp.close()
