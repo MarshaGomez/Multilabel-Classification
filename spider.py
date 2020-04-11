@@ -11,8 +11,10 @@ from link_harvester import category
 def getText(soup):
     tex=soup.find_all("div", {"class": "step"})
     tex=[it.getText() for it in tex]
-    tex=[it.lower() for it in tex]
-    tex=[re.sub("\\n\\b\\w{0,2}\\b|[^a-zA-Z ]", "", it) for it in tex]
+    tex=[it.lower().replace("[","").replace("]","").replace("x\nresearch source","")\
+        .replace("(","").replace(")","").replace(".","").replace(",","").replace("\n","")
+             .replace("-","").replace("\'", "") for it in tex]
+
     return tex
     # tex= [re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", it) for it in tex]
     #tex=[re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(it)) for it in tex]
@@ -23,19 +25,27 @@ def getText(soup):
 
 def parsePage(url):
 
-    html_text = requests.get(url).text
+    html_text = requests.get("https://www.wikihow.com"+url).text
     soup=BeautifulSoup(html_text, 'html.parser')
-    title=soup.find("meta", property="og:title").get("content")
-    summary=soup.find("div", {"id": "mf-section-0"}).getText().lower()
+    title=soup.find_all("a", {"href": "https://www.wikihow.com"+url})[1].getText()
+    print(title)
+    summary=soup.find("div", {"id": "mf-section-0"}).getText().lower().replace("[","").replace("]","").replace("x\nresearch source","")\
+        .replace("(","").replace(")","").replace(".","").replace(",","")
     text=getText(soup)
-    return [title,summary, text]
+    print(text)
+    #rows.append( [title,summary, text])
 
+def manageUrls(links):
+    print("TODO")
+    rows=[]
+    [parsePage(url) for url in links]
+   # [print(url) for url in rows]
 def parseCat(url):
     html_text = requests.get(url).text
     soup=BeautifulSoup(html_text, 'html.parser')
     li = soup.find_all("div", {"class": "responsive_thumb"})
     links = [div.find('a')['href'][23:] for div in li]
-    print(links)
+    manageUrls(links)
 
 
 if __name__ == '__main__':
