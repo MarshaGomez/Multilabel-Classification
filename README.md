@@ -3,6 +3,8 @@
 The 19 macrocategories of WikiHow are considered.
 For each category, the internal path of the first sublayer of categories is saved.
 Eact NAME_CAT.txt will contain strings like /Category:SUB_CAT name.
+
+
 TODO : check no repetition
 
 
