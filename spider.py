@@ -46,7 +46,7 @@ def cleanDescription(description):
 
 def getText(soup):
     tex=soup.find_all("div", {"class": "step"})
-    [cleanDescription(it) for it in tex]
+    tex = [cleanDescription(it) for it in tex]
     
     return " ".join(tex)
     # tex= [re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", it) for it in tex]
