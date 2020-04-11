@@ -57,6 +57,8 @@ if __name__ == '__main__':
         links[:] = [x for x in links if x]
         #now links contains the /category:subcat name
         [print(i) for i in links]
-        with open(cat + '.txt', 'a') as f:
+        with open('./texts/'+cat + '.txt', 'a') as f:
+            cat=str("/Category:"+cat)
+            f.write("%s\n" % cat)
             [f.write("%s\n" % item) for item in links]
             f.close()
