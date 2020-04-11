@@ -10,18 +10,16 @@ from link_harvester import category
 
 def getText(soup):
     tex=soup.find_all("div", {"class": "step"})
-    tex=[it.getText() for it in tex]
-    tex=[it.lower().replace("[","").replace("]","").replace("x\nresearch source","")\
-        .replace("(","").replace(")","").replace(".","").replace(",","").replace("\n","")
-             .replace("-","").replace("\'", "") for it in tex]
-
-    return tex
+    tex=[it.getText().lower() for it in tex]
+    tex=[re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", it) for it in tex]
+    tex=[re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(it)) for it in tex]
+    return " ".join(tex)
     # tex= [re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", it) for it in tex]
     #tex=[re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(it)) for it in tex]
 
 
 
- #   description = re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(description))
+ # ([^a-zA-Z\\s+\\w]|\\s+)  description = re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(description))
 
 def parsePage(url):
 
@@ -29,8 +27,13 @@ def parsePage(url):
     soup=BeautifulSoup(html_text, 'html.parser')
     title=soup.find_all("a", {"href": "https://www.wikihow.com"+url})[1].getText()
     print(title)
-    summary=soup.find("div", {"id": "mf-section-0"}).getText().lower().replace("[","").replace("]","").replace("x\nresearch source","")\
-        .replace("(","").replace(")","").replace(".","").replace(",","")
+    summary = soup.find("div", {"id": "mf-section-0"}).getText().lower()
+    summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
+    summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
+
+    print(summary)
+   # summary=soup.find("div", {"id": "mf-section-0"}).getText().lower().replace("[","").replace("]","").replace("x\nresearch source","")\
+       # .replace("(","").replace(")","").replace(".","").replace(",","")
     text=getText(soup)
     print(text)
     #rows.append( [title,summary, text])
