@@ -69,17 +69,13 @@ def parsePage(url):
         text=getText(soup)
         print(text)
 
-def manageUrls(links):
-    print("TODO")
-    [parsePage(url) for url in links]
 
 def parseCat(url):
     html_text = requests.get(url).text
     soup=BeautifulSoup(html_text, 'html.parser')
     li = soup.find_all("div", {"class": "responsive_thumb"})
     links = [div.find('a')['href'][23:] for div in li]
-    manageUrls(links)
-
+    [parsePage(url) for url in links]
 
 if __name__ == '__main__':
     print("for cat in category:")
