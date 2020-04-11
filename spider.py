@@ -4,6 +4,11 @@ import pandas as pd
 import csv
 import re
 import requests
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem.snowball import SnowballStemmer
+
 from bs4 import BeautifulSoup
 
 from link_harvester import category
