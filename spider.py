@@ -29,12 +29,13 @@ def parsePage(url):
     summary=soup.find("div", {"id": "mf-section-0"}).getText().lower()
     text=getText(soup)
     return [title,summary, text]
+
 def parseCat(url):
     html_text = requests.get(url).text
     soup=BeautifulSoup(html_text, 'html.parser')
     li = soup.find_all("div", {"class": "responsive_thumb"})
-    links = [div.find('a')['href'] for div in li]
-    [print(it) for it in links]
+    links = [div.find('a')['href'][23:] for div in li]
+    print(links)
 
 
 if __name__ == '__main__':
