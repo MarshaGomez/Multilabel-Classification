@@ -9,18 +9,21 @@ The aim is to build a multi-label classifier of Wikihow pages. A Wikihow page pe
 ## Project files
 **link_harvester.py**
 The 19 macrocategories of WikiHow are considered.
+```
 For each category, the internal path of the first sublayer of categories is saved.
 Eact NAME_CAT.txt will contain strings like /Category:SUB_CAT name.
 TODO : check no repetition
-
+```
 
 **spider.py*** - 
+```
 for each string in NAME_CAT.txt
   the link "http://www.wikihow.com/string" is visited
   title is taken
   summary is taken and polished
   text is taken and poolished
   TODO: everything is saved in a csv file
+```
 ## External libraries used so far
 
 Beautiful Soup library is used to handle the request and download the required pages.
