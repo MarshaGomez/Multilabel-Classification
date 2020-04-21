@@ -26,7 +26,7 @@ for each string in NAME_CAT.txt
 ```
 ## External libraries used so far
 
-Beautiful Soup library is used to handle the request and download the required pages.
-
-The npl library is employed as to clean, stem and tokenize the contents taken from the html code.
+ * request is used to handle the connection phase and download the required pages.
+ * BeautifulSoup is used to pull data from the HTML file
+ * npl  is employed  to clean, stem and tokenize the contents taken from the html code.
 
