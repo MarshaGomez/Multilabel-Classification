@@ -8,7 +8,7 @@ The aim is to build a multi-label classifier of Wikihow pages. A Wikihow page pe
 
 ## Project files
 **link_harvester.py**
-The 19 macrocategories of WikiHow are considered.
+The 19 macrocategories of WikiHow are hard-coded. Under discussion whether to automatize this.
 ```
 For each category, the internal path of the first sublayer of categories is saved.
 Eact NAME_CAT.txt will contain strings like /Category:SUB_CAT name.
