@@ -12,6 +12,8 @@ from langdetect import detect
 from bs4 import BeautifulSoup
 from link_harvester import category
 
+glbCategory = ""
+
 
 # Clean Description attribute. Apply Stopwords and Stem
 def cleanDescription(description):
@@ -28,7 +30,6 @@ def cleanDescription(description):
 
             filtered_sentence = []
             [filtered_sentence.append(w) for w in word_tokens if w not in stop_words ]
-            
 
             stemmer = SnowballStemmer('english')
             stemSentence = ''
@@ -50,24 +51,23 @@ def getText(soup):
     
     return " ".join(tex)
 
-
-
-
 def parsePage(url):
-
     html_text = requests.get("https://www.wikihow.com"+url).text
     soup=BeautifulSoup(html_text, 'html.parser')
     title=soup.find_all("a", {"href": "https://www.wikihow.com"+url}, id=False)
 
     if title!=[] and len(title)==1:
-        print(title[0].getText())
+        print("Title: " + title[0].getText())
         summary = soup.find("div", {"id": "mf-section-0"}).getText().lower()
         summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
         summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
         cleanDescription(summary)
-        print(summary)
+        print("Summary: " + summary)
         text=getText(soup)
-        print(text)
+        print("Text: " + text)
+        print("Category" + glbCategory)
+        title = title[0].getText()
+        transformToCSV(title, summary, text, glbCategory)
 
 
 def parseCat(url):
@@ -77,16 +77,28 @@ def parseCat(url):
     links = [div.find('a')['href'][23:] for div in li]
     [parsePage(url) for url in links]
 
-if __name__ == '__main__':
-    print("for cat in category:")
-    print("open cat.txt")
-    print("for each subcat, get page and save to cvs")
-    cat=category[0]
-    with open('./texts/' + cat + '.txt', 'r') as fp:
-        line = fp.readline()
-        cnt = 1
-        while line:
-            result=parseCat("https://www.wikihow.com"+line)
-            line = fp.readline()
-            cnt += 1
+# Title, Summary, Text and Category
+def transformToCSV(title, summary, text, category):
+    csvRow = [title, summary, text, category]
+
+    csvfile = "./data/" + cat + ".csv"
+    with open(csvfile, "a", newline='') as fp:
+        wr = csv.writer(fp, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        wr.writerow(csvRow)
         fp.close()
+   # print("pippo")
+
+if __name__ == '__main__':
+    for cat in category:
+        glbCategory = cat
+        with open('./texts/' + cat + '.txt', 'r') as fp:
+            articleInfo = {}
+            line = fp.readline()
+            cnt = 1
+            while line:
+                result=parseCat("https://www.wikihow.com"+line)
+                line = fp.readline()
+                cnt += 1
+            fp.close()
+
+
