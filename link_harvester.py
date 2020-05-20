@@ -1,5 +1,4 @@
-category = ["Arts-and-Entertainment", "Family-Life", "Hobbies-and-Crafts", "Pets-and-Animals", "Travel", "Cars-%26-Other-Vehicles", "Finance-and-Business", "Holidays-and-Traditions", "Philosophy-and-Religion",
-                "Work-World", "Computers-and-Electronics", "Food-and-Entertaining", "Home-and-Garden", "Relationships", "Youth", "Education-and-Communications", "Health", "Personal-Care-and-Style",
+category = [ "Computers-and-Electronics", "Food-and-Entertaining", "Home-and-Garden", "Relationships", "Youth", "Education-and-Communications", "Health", "Personal-Care-and-Style",
                 "Sports-and-Fitness"]
 
 import requests

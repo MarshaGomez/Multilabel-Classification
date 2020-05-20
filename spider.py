@@ -89,9 +89,9 @@ def transformToCSV(title, summary, text, category):
    # print("pippo")
 
 if __name__ == '__main__':
-    for cat in category:
-        glbCategory = cat
-        with open('./texts/' + cat + '.txt', 'r') as fp:
+    cat="Personal-Care-and-Style"
+    glbCategory = cat
+    with open('./texts/' + cat + '.txt', 'r') as fp:
             articleInfo = {}
             line = fp.readline()
             cnt = 1
@@ -102,3 +102,4 @@ if __name__ == '__main__':
             fp.close()
 
 
+ 
