@@ -1,5 +1,4 @@
-category = [ "Computers-and-Electronics", "Food-and-Entertaining", "Home-and-Garden", "Relationships", "Youth", "Education-and-Communications", "Health", "Personal-Care-and-Style",
-                "Sports-and-Fitness"]
+category = ["Arts-and-Entertainment", "Cars-%26-Other-Vehicles", "Travel", "Work-World", "Relationships", "Philosophy-and-Religion", "Family-Life", "Finance-and-Business", "Computers-and-Electronics", "Food-and-Entertaining", "Home-and-Garden",  "Youth", "Education-and-Communications", "Health", "Hobbies-and-Crafts","Personal-Care-and-Style", "Sports-and-Fitness", "Holidays-and-Traditions", "Pets-and-Animals"]
 
 import requests
 from bs4 import BeautifulSoup
