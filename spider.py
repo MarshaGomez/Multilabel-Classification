@@ -14,12 +14,16 @@ from link_harvester import category
 
 glbCategory = ""
 
-
 # Clean Description attribute. Apply Stopwords and Stem
 def cleanDescription(description):
     description = description.lower()
-    description = re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", description)
+    description = re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", str(description))
     description = re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(description))
+    description = re.sub("\\W", " ", str(description))
+    description = re.sub("\\s+", " ", str(description))
+    description = re.sub("^\\s+", "", str(description))
+    description = re.sub("\\s+$", "", str(description))
+
 
     if description != ' ' and description != '':
         lang = detect(description)
@@ -39,6 +43,10 @@ def cleanDescription(description):
                 stemSentence += ' '
             description = re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", str(stemSentence))
             description = re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(description))
+            description = re.sub("\\W", " ", str(description))
+            description = re.sub("\\s+", " ", str(description))
+            description = re.sub("^\\s+", "", str(description))
+            description = re.sub("\\s+$", "", str(description))
             return description
         else:
             return ''
@@ -59,11 +67,12 @@ def parsePage(url):
     if title!=[] and len(title)==1:
         print("Title: " + title[0].getText())
         summary = soup.find("div", {"id": "mf-section-0"}).getText().lower()
-        summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
-        summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
-        cleanDescription(summary)
+        #summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
+        #summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
+        summary = cleanDescription(summary)
         print("Summary: " + summary)
         text=getText(soup)
+        text = cleanDescription(text)
         print("Text: " + text)
         print("Category" + glbCategory)
         title = title[0].getText()
@@ -81,7 +90,7 @@ def parseCat(url):
 def transformToCSV(title, summary, text, category):
     csvRow = [title, summary, text, category]
 
-    csvfile = "./data/" + cat + ".csv"
+    csvfile = "./data/data/" + cat + ".csv"
     with open(csvfile, "a", newline='') as fp:
         wr = csv.writer(fp, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         wr.writerow(csvRow)
