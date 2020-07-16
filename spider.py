@@ -49,9 +49,9 @@ def cleanDescription(description):
             description = re.sub("\\s+$", "", str(description))
             return description
         else:
-            return ''
+            return ' '
     else:
-        return ''
+        return ' '
 
 def getText(soup):
     tex=soup.find_all("div", {"class": "step"})
@@ -60,23 +60,31 @@ def getText(soup):
     return " ".join(tex)
 
 def parsePage(url):
-    html_text = requests.get("https://www.wikihow.com"+url).text
-    soup=BeautifulSoup(html_text, 'html.parser')
-    title=soup.find_all("a", {"href": "https://www.wikihow.com"+url}, id=False)
+    try:
+        html_text = requests.get("https://www.wikihow.com"+url).text
+        soup=BeautifulSoup(html_text, 'html.parser')
+        title=soup.find_all("a", {"href": "https://www.wikihow.com"+url}, id=False)
 
-    if title!=[] and len(title)==1:
-        print("Title: " + title[0].getText())
-        summary = soup.find("div", {"id": "mf-section-0"}).getText().lower()
-        #summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
-        #summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
-        summary = cleanDescription(summary)
-        print("Summary: " + summary)
-        text=getText(soup)
-        text = cleanDescription(text)
-        print("Text: " + text)
-        print("Category" + glbCategory)
-        title = title[0].getText()
-        transformToCSV(title, summary, text, glbCategory)
+        if title!=[] and len(title)==1:
+            print("Title: " + title[0].getText())
+            summary = soup.find("div", {"id": "mf-section-0"})
+            if summary is None:
+                print("None Summary")
+            else:
+                summary = summary.getText().lower()
+                #summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
+                #summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
+                summary = cleanDescription(summary)
+                #print("Summary: " + summary)
+                text=getText(soup)
+                text = cleanDescription(text)
+                #print("Text: " + text)
+                #print("Category" + glbCategory)
+                title = cleanDescription(title[0].getText())
+                transformToCSV(title, summary, text, glbCategory)
+    except requests.ConnectionError:
+        print("Conexion Error")
+    
 
 
 def parseCat(url):
@@ -98,17 +106,19 @@ def transformToCSV(title, summary, text, category):
    # print("pippo")
 
 if __name__ == '__main__':
-    cat="Personal-Care-and-Style"
-    glbCategory = cat
-    with open('./texts/' + cat + '.txt', 'r') as fp:
-            articleInfo = {}
-            line = fp.readline()
-            cnt = 1
-            while line:
-                result=parseCat("https://www.wikihow.com"+line)
+    lista=category
+    
+    for cat in lista:
+        glbCategory = cat
+        with open('./texts/' + cat + '.txt', 'r') as fp:
+                articleInfo = {}
                 line = fp.readline()
-                cnt += 1
-            fp.close()
+                cnt = 1
+                while line:
+                    result=parseCat("https://www.wikihow.com"+line)
+                    line = fp.readline()
+                    cnt += 1
+                fp.close()
 
 
  
