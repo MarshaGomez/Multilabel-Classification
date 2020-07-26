@@ -93,13 +93,13 @@ public class Test {
 		//System.out.println(eval.toSummaryString());
 		System.out.print(" the expression for the input data as per alogorithm is ");
 		System.out.println(classifier);
-		
+		/*
                 for (int i = 0; i < predictingDataSet.numInstances(); i++) {
 			System.out.println(predictingDataSet.instance(i));
 			double index = classifier.classifyInstance(predictingDataSet.instance(i));
 			String className = trainingDataSet.attribute(0).value((int) index);
 			System.out.println(className);
-		}
+		}*/
 
 	}
         
