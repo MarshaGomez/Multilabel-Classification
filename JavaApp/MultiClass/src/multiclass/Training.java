@@ -3,6 +3,9 @@ import ModelClassifier.ModelClassifier;
 import ModelClassifier.ModelGenerator;
 import java.io.File;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomForest;
+import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Debug;
 import weka.core.Instances;
 import weka.core.SelectedTag;
@@ -22,7 +25,7 @@ import weka.core.tokenizers.NGramTokenizer;
 public class Training {
 
     public static final String DATASETPATH = "D:\\GitHub\\parser\\data\\cleaned\\AllCategories.arff";
-    public static final String MODELPATH = "D:\\Downloads\\weka-example-master\\weka-example-master\\data\\model.bin";
+    public static final String MODELPATH = "D:\\Downloads\\weka-example-master\\weka-example-master\\data\\";
 
     public static void main(String[] args) throws Exception {
         System.out.print("\n ---- START ----");
@@ -77,18 +80,62 @@ public class Training {
         Instances traindataset = new Instances(datasetnor, 0, trainSize);
         Instances testdataset = new Instances(datasetnor, trainSize, testSize);
 
+        System.out.print("\n ---- SMO MODEL ----");
         // build classifier with train dataset             
-        SMO ann = (SMO) mg.buildClassifier(traindataset, "SMO");
+        SMO smo = (SMO) mg.buildClassifier(traindataset, "SMO");
 
         // Evaluate classifier with test dataset
-        String evalsummary = mg.evaluateModel(ann, traindataset, testdataset);
+        String evalsummary = mg.evaluateModel(smo, traindataset, testdataset);
         System.out.println("Evaluation: " + evalsummary);
 
         //Save model 
-        mg.saveModel(ann, MODElPATH);
+        mg.saveModel(smo, MODELPATH+"SMO.bin");
         System.out.print("\n ---- SAVE MODEL ----");
+        
+        
+        System.out.print("\n ---- RANDOM FOREST MODEL ----");
+        // build classifier with train dataset             
+        RandomForest randomForest = (RandomForest) mg.buildClassifier(traindataset, "RANDOMFOREST");
 
+        // Evaluate classifier with test dataset
+        evalsummary = "";
+        evalsummary = mg.evaluateModel(randomForest, traindataset, testdataset);
+        System.out.println("Evaluation: " + evalsummary);
 
+        //Save model 
+        mg.saveModel(randomForest, MODELPATH+"RANDOMFOREST.bin");
+        System.out.print("\n ---- SAVE MODEL ----");
+        
+        
+        System.out.print("\n ---- J48 MODEL ----");
+        // build classifier with train dataset             
+        J48 j48 = (J48) mg.buildClassifier(traindataset, "J48");
+
+        // Evaluate classifier with test dataset
+        evalsummary = "";
+        evalsummary = mg.evaluateModel(j48, traindataset, testdataset);
+        System.out.println("Evaluation: " + evalsummary);
+
+        //Save model 
+        mg.saveModel(j48, MODELPATH+"J48.bin");
+        System.out.print("\n ---- SAVE MODEL ----");
+        
+        
+        
+        System.out.print("\n ---- NAIVE BAYES MODEL ----");
+        // build classifier with train dataset             
+        NaiveBayes naiveBayes = (NaiveBayes) mg.buildClassifier(traindataset, "NAIVEBAYES");
+
+        // Evaluate classifier with test dataset
+        evalsummary = "";
+        evalsummary = mg.evaluateModel(naiveBayes, traindataset, testdataset);
+        System.out.println("Evaluation: " + evalsummary);
+
+        //Save model 
+        mg.saveModel(naiveBayes, MODELPATH+"NAIVEBAYES.bin");
+        System.out.print("\n ---- SAVE MODEL ----");
+        
+        
         //classifiy a single instance 
         // -- ModelClassifier cls = new ModelClassifier();
         // -- String classname = cls.classifiy(Filter.useFilter(cls.createInstance(1.6, 0.2, 0), filter), MODElPATH);

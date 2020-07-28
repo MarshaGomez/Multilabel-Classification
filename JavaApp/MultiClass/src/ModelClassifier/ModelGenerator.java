@@ -69,7 +69,7 @@ public class ModelGenerator {
     }
     
         public Classifier buildJ48(Instances traindataset){
-        SMO m = new SMO();
+        J48 m = new J48();
         try {
             m.buildClassifier(traindataset);
 
