@@ -15,6 +15,40 @@ from link_harvester import category
 glbCategory = ""
 
 # Clean Description attribute. Apply Stopwords and Stem
+def clean(description):
+    description = description.lower()
+    description = re.sub("\\W", " ", str(description))
+    description = re.sub("\\s+", " ", str(description))
+    description = re.sub("^\\s+", "", str(description))
+    description = re.sub("\\s+$", "", str(description))
+
+
+    if description != ' ' and description != '':
+        lang = detect(description)
+
+        if lang == 'en':
+            stop_words = set(stopwords.words('english'))
+            word_tokens = word_tokenize(description)
+
+            filtered_sentence = []
+            [filtered_sentence.append(w) for w in word_tokens if w not in stop_words ]
+
+            stemmer = SnowballStemmer('english')
+            stemSentence = ''
+            for word in filtered_sentence:
+                stem = stemmer.stem(word)
+                stemSentence += stem
+                stemSentence += ' '
+            description = re.sub("\\W", " ", str(description))
+            description = re.sub("\\s+", " ", str(description))
+            description = re.sub("^\\s+", "", str(description))
+            description = re.sub("\\s+$", "", str(description))
+            return description
+        else:
+            return ' '
+    else:
+        return ' '
+
 def cleanDescription(description):
     description = description.lower()
     description = re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", " ", str(description))
@@ -55,7 +89,7 @@ def cleanDescription(description):
 
 def getText(soup):
     tex=soup.find_all("div", {"class": "step"})
-    tex = [cleanDescription(it.getText()) for it in tex]
+    tex = [clean(it.getText()) for it in tex]
     
     return " ".join(tex)
 
@@ -74,13 +108,13 @@ def parsePage(url):
                 summary = summary.getText().lower()
                 #summary=re.sub("\\b\\w{0,2}\\b|[^a-zA-Z ]", "", summary)
                 #summary=re.sub("([^a-zA-Z\\s+\\w]|\\s+)", " ", str(summary))
-                summary = cleanDescription(summary)
+                summary = clean(summary)
                 #print("Summary: " + summary)
                 text=getText(soup)
-                text = cleanDescription(text)
+                text = clean(text)
                 #print("Text: " + text)
                 #print("Category" + glbCategory)
-                title = cleanDescription(title[0].getText())
+                title = clean(title[0].getText())
                 transformToCSV(title, summary, text, glbCategory)
     except requests.ConnectionError:
         print("Conexion Error")
