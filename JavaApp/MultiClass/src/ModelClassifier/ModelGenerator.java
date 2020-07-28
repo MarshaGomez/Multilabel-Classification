@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -32,48 +35,73 @@ public class ModelGenerator {
         return dataset;
     }
 
-    public Classifier buildClassifier(Instances traindataset) {
+    public Classifier buildSMO(Instances traindataset){
         SMO m = new SMO();
-        
-        //m.setGUI(true);
-        //m.setValidationSetSize(0);
-        //m.setBatchSize("100");
-        //m.setLearningRate(0.3);
-        //m.setSeed(0);
-        //m.setMomentum(0.2);
-        //m.setTrainingTime(500);//epochs
-        //m.setNormalizeAttributes(true);
-        
-        /*Multipreceptron parameters and its default values 
-        *Learning Rate for the backpropagation algorithm (Value should be between 0 - 1, Default = 0.3).
-        *m.setLearningRate(0);
-        
-	*Momentum Rate for the backpropagation algorithm (Value should be between 0 - 1, Default = 0.2).
-	*m.setMomentum(0);
-        
-        *Number of epochs to train through (Default = 500).
-        *m.setTrainingTime(0)
-        
-	*Percentage size of validation set to use to terminate training (if this is non zero it can pre-empt num of epochs.
-	 (Value should be between 0 - 100, Default = 0).
-        *m.setValidationSetSize(0);
-        
-	*The value used to seed the random number generator (Value should be >= 0 and and a long, Default = 0).
-        *m.setSeed(0);
-        
-        *The hidden layers to be created for the network(Value should be a list of comma separated Natural 
-	numbers or the letters 'a' = (attribs + classes) / 2, 
-	'i' = attribs, 'o' = classes, 't' = attribs .+ classes) for wildcard values, Default = a).
-         *m.setHiddenLayers("2,3,3"); three hidden layer with 2 nodes in first layer and 3 nodends in second and 3 nodes in the third.
-        
-        *The desired batch size for batch prediction  (default 100).
-        *m.setBatchSize("1");
-         */
         try {
             m.buildClassifier(traindataset);
 
         } catch (Exception ex) {
             Logger.getLogger(ModelGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return m;
+    }
+    
+    public Classifier buildRandomForest(Instances traindataset){
+        RandomForest m = new RandomForest();
+        try {
+            m.buildClassifier(traindataset);
+
+        } catch (Exception ex) {
+            Logger.getLogger(ModelGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return m;
+    }
+
+    public Classifier buildNaiveBayes(Instances traindataset){
+        NaiveBayes m = new NaiveBayes();
+        try {
+            m.buildClassifier(traindataset);
+
+        } catch (Exception ex) {
+            Logger.getLogger(ModelGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return m;
+    }
+    
+        public Classifier buildJ48(Instances traindataset){
+        SMO m = new SMO();
+        try {
+            m.buildClassifier(traindataset);
+
+        } catch (Exception ex) {
+            Logger.getLogger(ModelGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return m;
+    }
+        
+    public Classifier buildClassifier(Instances traindataset, String type) {
+        Classifier m;
+        // Depend on the Classifier type, build the Classifier
+        switch(type) {
+            case "SMO":
+                m = new SMO();
+                m = buildSMO(traindataset);
+                break;
+            case "J48":
+                m = new J48();
+                m = buildJ48(traindataset);
+                break;
+            case "RANDOMFOREST":
+                m = new RandomForest();
+                m = buildRandomForest(traindataset);
+                break;
+            case "NAIVEBAYES":
+                m = new NaiveBayes();
+                m = buildNaiveBayes(traindataset);
+                break;
+            default:
+                m = new SMO();
+                m = buildSMO(traindataset);
         }
         return m;
     }
@@ -92,7 +120,6 @@ public class ModelGenerator {
     }
 
     public void saveModel(Classifier model, String modelpath) {
-
         try {
             SerializationHelper.write(modelpath, model);
         } catch (Exception ex) {
