@@ -7,7 +7,6 @@ import weka.core.Debug;
 import weka.core.Instances;
 import weka.core.SelectedTag;
 import weka.filters.Filter;
-// -- import weka.filters.unsupervised.attribute.Normalize;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 import weka.core.stemmers.LovinsStemmer;
 import weka.core.stemmers.Stemmer;
@@ -20,10 +19,10 @@ import weka.core.tokenizers.NGramTokenizer;
  * Data Mining and Machine Learning University of Pisa
  * Github link: https://github.com/dariamaggi/parser
  */
-public class Test1 {
+public class Training {
 
     public static final String DATASETPATH = "D:\\GitHub\\parser\\data\\cleaned\\AllCategories.arff";
-    public static final String MODElPATH = "D:\\Downloads\\weka-example-master\\weka-example-master\\data\\model.bin";
+    public static final String MODELPATH = "D:\\Downloads\\weka-example-master\\weka-example-master\\data\\model.bin";
 
     public static void main(String[] args) throws Exception {
         System.out.print("\n ---- START ----");
@@ -79,7 +78,7 @@ public class Test1 {
         Instances testdataset = new Instances(datasetnor, trainSize, testSize);
 
         // build classifier with train dataset             
-        SMO ann = (SMO) mg.buildClassifier(traindataset);
+        SMO ann = (SMO) mg.buildClassifier(traindataset, "SMO");
 
         // Evaluate classifier with test dataset
         String evalsummary = mg.evaluateModel(ann, traindataset, testdataset);
