@@ -8,10 +8,11 @@ package multiclass;
 
 import weka.classifiers.Classifier;
 import weka.clusterers.Clusterer;
-
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
-import weka.clusterers.SimpleKMeans;
+import weka.classifiers.trees.RandomForest;
+import weka.classifiers.trees.J48;
+import weka.classifiers.functions.SMO;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.filters.Filter;
@@ -26,7 +27,7 @@ public class Test {
 	/** file names are defined */
 	public static final String TRAINING_DATA_SET_FILENAME = "Train.arff";
 	public static final String TESTING_DATA_SET_FILENAME = "Test.arff";
-	public static final String PREDICTION_DATA_SET_FILENAME = "Test.arff";
+	public static final String PREDICTION_DATA_SET_FILENAME = "Test_1.arff";
 
 	/**
 	 * This method is to load the data set.
@@ -74,32 +75,32 @@ public class Test {
                 Instances predictingDataSet = getDataSet(PREDICTION_DATA_SET_FILENAME);
 
                 /** Classifier here is Linear Regression */
-		Clusterer classifier = new SimpleKMeans();
+		Classifier classifier = new NaiveBayes();
                 
 		/** */
-		classifier.buildClusterer(trainingDataSet);
+		classifier.buildClassifier(trainingDataSet);
 		/**
 		 * train the alogorithm with the training data and evaluate the
 		 * algorithm with testing data
 		 */
                 
                 
-		// Evaluation eval = new Evaluation(trainingDataSet);
-		// eval.evaluateModel(classifier, testingDataSet);
+		Evaluation eval = new Evaluation(trainingDataSet);
+		eval.evaluateModel(classifier, testingDataSet);
                 
                 
 		/** Print the algorithm summary */
 		System.out.println("** Naive Bayes Evaluation with Datasets **");
-		//System.out.println(eval.toSummaryString());
+		System.out.println(eval.toSummaryString());
 		System.out.print(" the expression for the input data as per alogorithm is ");
-		System.out.println(classifier);
-		/*
+		//System.out.println(classifier);
+		
                 for (int i = 0; i < predictingDataSet.numInstances(); i++) {
 			System.out.println(predictingDataSet.instance(i));
 			double index = classifier.classifyInstance(predictingDataSet.instance(i));
 			String className = trainingDataSet.attribute(0).value((int) index);
-			System.out.println(className);
-		}*/
+			//System.out.println(className);
+		}
 
 	}
         
