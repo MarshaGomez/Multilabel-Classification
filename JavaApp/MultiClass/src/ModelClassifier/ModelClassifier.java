@@ -15,6 +15,12 @@ import weka.core.DenseInstance;
 import weka.core.Instances;
 import weka.core.Instance;
 import weka.core.SerializationHelper;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.FastVector;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.Utils;
 
 /**
  * This is a classifier for wikihow dataset  
@@ -75,52 +81,78 @@ public class ModelClassifier {
         dataRaw.setClassIndex(dataRaw.numAttributes()- 1);
     }
 
+    public Instances createInstance(String TITLE, String SUMMARY, String TEXT){
+        FastVector      atts;
+        FastVector      attVals;
+        Instances       data;
+        double[]        vals;
+        int             i;
+
+        // 1. set up attributes
+        atts = new FastVector();
+        // - String
+        atts.addElement(new Attribute("TITLE", (FastVector) null));
+        atts.addElement(new Attribute("SUMMARY", (FastVector) null));
+        atts.addElement(new Attribute("TEXT", (FastVector) null));
+        // - Nominal
+        attVals = new FastVector();
+        attVals.addElement("Arts-and-Entertainment");
+        attVals.addElement("Cars-and-Other-Vehicles");
+        attVals.addElement("Computers-and-Electronics");        
+        attVals.addElement("Education-and-Communications");
+        attVals.addElement("Family-Life");
+        attVals.addElement("Finance-and-Business");
+        attVals.addElement("Food-and-Entertaining");
+        attVals.addElement("Health");
+        attVals.addElement("Hobbies-and-Crafts");
+        attVals.addElement("Holidays-and-Traditions");
+        attVals.addElement("Home-and-Garden");
+        attVals.addElement("Personal-Care-and-Style");
+        attVals.addElement("Pets-and-Animals");
+        attVals.addElement("Philosophy-and-Religion");        
+        attVals.addElement("Relationships");
+        attVals.addElement("Sports-and-Fitness");
+        attVals.addElement("Travel");
+        attVals.addElement("Work-World");
+        attVals.addElement("Youth");
+        atts.addElement(new Attribute("CATEGORY", attVals));
+        
+        // 2. create Instances object
+        data = new Instances("OneCategorie-weka.filters.unsupervised.attribute.NominalToString-Cfirst-3", atts, 0);
+
+        // 3. fill with data
+        // first instance
+        vals = new double[data.numAttributes()];
+        // - String
+        vals[0] = data.attribute(0).addStringValue(TITLE);
+        vals[1] = data.attribute(1).addStringValue(SUMMARY);
+        vals[2] = data.attribute(2).addStringValue(TEXT);
+
+        
+        //vals[3] = attVals.indexOf("Youth");
+        
+        // add
+        data.add(new DenseInstance(1.0, vals));
+
+        // 4. output data
+        return data;
+    }
     
-    public Instances createInstance(Instances data) {
+    /*public Instances createInstance(Instances data) {
         dataRaw.clear();
         dataRaw.add(data.instance(0));
         
-        
-        
-//        Instance data;
-//        data = new DenseInstance(3);
-//        
-//        data.setValue(attributes.get(1), TITLE);        
-//        data.setValue(attributes.get(2), SUMMARY);
-//        data.setValue(attributes.get(3), TEXT);
-//         
-//        dataRaw.add(data);
-//
-//
-//        dataRaw.clear();
-//        
-//        String[] values = new String[]{TITLE, SUMMARY, TEXT};
-//        dataRaw.add(new AbstractInstance(values));
-
-
-//            Instance instance = new DenseInstance(1);
-//            instance.setValue(1, SUMMARY);            
-//
-//            dataRaw.add(instance);
-        
         return dataRaw;
-     }
+     }*/
 
 
     public String classifiy(Instances insts, String path) {
         String result = "Not classified!";
         Classifier cls = null;
         try {
-            cls = (RandomForest) SerializationHelper.read(path);
-            // System.out.println("Class predicted: " + cls);
-//            dataRaw.instance(0).setClassValue(cls.classifyInstance(dataRaw.instance(0)));
-//            double predicted;
-//            System.out.println("Class predicted: " + dataRaw.instance(0).toString());
-//            predicted = dataRaw.instance(0).classValue();
+            cls = (SMO) SerializationHelper.read(path);
             result = classVal.get((int) cls.classifyInstance(insts.firstInstance()));
 
-           // result = classVal.get((int) cls.classifyInstance(insts.firstInstance()));
-            // double pred = cls.classifyInstance(dataRaw.instance(0));
             System.out.println("Class predicted: " + result);
 
         } catch (Exception ex) {

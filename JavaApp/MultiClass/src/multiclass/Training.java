@@ -44,7 +44,7 @@ public class Training {
         ModelGenerator mg = new ModelGenerator();
 
         Instances dataset = mg.loadDataset(DATASETPATH);
-        Instances data = mg.loadDataset(DATASETPATHONE);
+
 
 
 
@@ -86,10 +86,9 @@ public class Training {
         
         //Normalize dataset
         filter.setInputFormat(dataset);
-        filter.setInputFormat(data);
         
         Instances datasetnor = Filter.useFilter(dataset, filter);
-        Instances dataFilter = Filter.useFilter(data, filter);
+        // Instances dataFilter = Filter.useFilter(data, filter);
 
         Instances traindataset = new Instances(datasetnor, 0, trainSize);
         Instances testdataset = new Instances(datasetnor, trainSize, testSize);
@@ -128,9 +127,11 @@ public class Training {
         
         
 
-
-        String classname = cls.classifiy(cls.createInstance(dataFilter), MODELPATH);
+        String classname = cls.classifiy(Filter.useFilter(cls.createInstance("TITLE", "SUMMARY", "TEXT"),filter), MODELPATH);
         System.out.println("\n The class name for the instance TEST is: " +classname);
+        
+        
+        
         
         
         

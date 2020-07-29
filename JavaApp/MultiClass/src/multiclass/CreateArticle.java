@@ -1,9 +1,28 @@
 
 package MultiClass;
 
+import ModelClassifier.ModelClassifier;
+import ModelClassifier.ModelGenerator;
+import MultiClass.Main;
+
 import java.awt.Color;
 import java.awt.Image;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.*;
 import javax.swing.ImageIcon;
+
+import weka.core.Debug;
+import weka.core.Instances;
+import weka.core.SelectedTag;
+import weka.core.stemmers.LovinsStemmer;
+import weka.core.stemmers.Stemmer;
+import weka.core.stopwords.WordsFromFile;
+import weka.core.tokenizers.NGramTokenizer;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.StringToWordVector;
 
 /**
  * This is a classifier for wikihow dataset  
@@ -17,20 +36,30 @@ public class CreateArticle extends javax.swing.JFrame {
      * Creates new form CreateArticle
      */
     private ImageIcon image1;
+    private String DATASETPATH = "D:\\GitHub\\parser\\data\\cleaned\\AllCategories.arff";
+    private String STOPWORDSPATH = "D:\\GitHub\\parser\\JavaApp\\MultiClass\\src\\data\\stopwords.txt";
+    private String MODELPATH = "D:\\GitHub\\parser\\JavaApp\\MultiClass\\src\\data\\";
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
     
     public CreateArticle() {
         initComponents();
         jPanel1.setBackground(Color.WHITE);
         //jPanel2.setBackground(Color.BLACK);
 
-        image1 = new ImageIcon(getClass().getResource("../img/header_logo.png"));
-        //on windows uncomment below
-       // image1 = new ImageIcon(getClass().getResource("..\\img\\header_logo.png"));
+        
+        image1 = new ImageIcon(getClass().getResource("..\\img\\header_logo.png"));
         
         Image image = image1.getImage(); // transform it 
         Image newimg = image.getScaledInstance(150, 70,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
         image1 = new ImageIcon(newimg);  // transform it back
         jLabel1.setIcon(image1);
+        
+        jButton2.setBackground(Color.WHITE);
+        jComboBoxCategory2.setBackground(Color.WHITE);
+        Back1.setBackground(Color.WHITE);
+        
+
     }
 
     /**
@@ -106,6 +135,7 @@ public class CreateArticle extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(120, 153, 71));
         jButton2.setFont(new java.awt.Font("Microsoft JhengHei", 0, 14)); // NOI18N
         jButton2.setLabel("Predict");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -118,6 +148,7 @@ public class CreateArticle extends javax.swing.JFrame {
         jTextArea6.setRows(5);
         jScrollPane6.setViewportView(jTextArea6);
 
+        Back1.setBackground(new java.awt.Color(120, 153, 71));
         Back1.setFont(new java.awt.Font("Microsoft JhengHei", 0, 14)); // NOI18N
         Back1.setText("< Back");
         Back1.addActionListener(new java.awt.event.ActionListener() {
@@ -244,7 +275,119 @@ public class CreateArticle extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxCategory2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        int minTermFreq = 2;
+        boolean useStemmer = false;
+
+        boolean useIdf = true;
+        int maxGrams = 2;
+        int minGrams = 2;
+        
+        ModelGenerator mg = new ModelGenerator();
+        String pattern = "\\W";
+        String pattern1 = "\\s+";
+        String pattern2 = "^\\s+";
+        String pattern3 = "\\s+$";
+        String message = "";
+        
+        String TITLE = jTextField2.getText().toLowerCase();
+        
+        TITLE = TITLE.replaceAll(pattern, " ");
+        TITLE = TITLE.replaceAll(pattern1, " ");
+        TITLE = TITLE.replaceAll(pattern2, " ");
+        TITLE = TITLE.replaceAll(pattern3, " ");
+        
+        
+        String SUMMARY = jTextArea4.getText().toLowerCase();
+        
+        SUMMARY = SUMMARY.replaceAll(pattern, " ");
+        SUMMARY = SUMMARY.replaceAll(pattern1, " ");
+        SUMMARY = SUMMARY.replaceAll(pattern2, " ");
+        SUMMARY = SUMMARY.replaceAll(pattern3, " ");
+        
+        String TEXT = jTextArea5.getText().toLowerCase();
+        
+        TEXT = TEXT.replaceAll(pattern, " ");
+        TEXT = TEXT.replaceAll(pattern1, " ");
+        TEXT = TEXT.replaceAll(pattern2, " ");
+        TEXT = TEXT.replaceAll(pattern3, " ");
+
+        Date date = new Date();
+        message = message + "\n -- PROCESS INIT "+ dateFormat.format(date);
+
+        try {
+            Instances dataset = mg.loadDataset(DATASETPATH);
+        
+            // -- Filter filter = new Normalize();
+            StringToWordVector filter = new StringToWordVector();
+            filter.setWordsToKeep(1000000);
+
+            // divide dataset to train dataset 80% and test dataset 20%
+            int trainSize = (int) Math.round(dataset.numInstances() * 0.8);
+            int testSize = dataset.numInstances() - trainSize;
+
+            dataset.randomize(new Debug.Random(1));// if you comment this line the accuracy of the model will be droped from 96.6% to 80%
+
+            message = message + "\n ---- SET CONFIGURATION ---- ";
+
+            if(useIdf){
+                filter.setIDFTransform(true);
+            }
+            filter.setTFTransform(true);
+            filter.setLowerCaseTokens(true);
+            filter.setOutputWordCounts(true);
+            filter.setMinTermFreq(minTermFreq);
+            filter.setNormalizeDocLength(new SelectedTag(StringToWordVector.FILTER_NORMALIZE_ALL,StringToWordVector.TAGS_FILTER));
+            NGramTokenizer t = new NGramTokenizer();
+            t.setNGramMaxSize(maxGrams);
+            t.setNGramMinSize(minGrams);    
+            filter.setTokenizer(t); 
+
+            // Use Stemmer
+            if (useStemmer){
+                WordsFromFile stopwords = new WordsFromFile();
+                stopwords.setStopwords(new File(STOPWORDSPATH));
+                filter.setStopwordsHandler(stopwords);
+                
+                Stemmer s = new /*Iterated*/LovinsStemmer();
+                filter.setStemmer(s);
+            }
+            
+            //Normalize dataset
+            filter.setInputFormat(dataset);
+
+            Instances datasetnor = Filter.useFilter(dataset, filter);
+            // Instances dataFilter = Filter.useFilter(data, filter);
+
+            Instances traindataset = new Instances(datasetnor, 0, trainSize);
+            Instances testdataset = new Instances(datasetnor, trainSize, testSize);
+
+
+            ModelClassifier cls = new ModelClassifier();
+            String option = jComboBoxCategory2.getSelectedItem().toString();
+            
+            String path = "";
+            path = MODELPATH+option+".bin";
+            
+            message = message + "\n ---- CALCULATION RESULT ---- ";
+
+            String classname = cls.classifiy(Filter.useFilter(cls.createInstance(TITLE, SUMMARY, TEXT),filter), path);
+            message = message + "\n ------------------------------------------------------------------------ \n";
+            message = message + "\n \n \n The class name for the instance WikiHow Classification is: \n \n \n";
+            message = message + classname.toUpperCase();
+            message = message + "\n ------------------------------------------------------------------------ \n";
+            
+            date = new Date();
+            message = message + "\n -- PROCESS END "+ dateFormat.format(date);
+
+        } catch (Exception e) {
+            System.err.println("\n The class name for the instance TEST is: " + e);
+            message = message + e;
+            date = new Date();
+            message = message + "\n -- PROCESS END WITH ERRORS "+ dateFormat.format(date);
+        }
+        
+        jTextArea6.setText(message);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void Back1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Back1ActionPerformed
