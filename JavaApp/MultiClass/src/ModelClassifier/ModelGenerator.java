@@ -1,5 +1,6 @@
 package ModelClassifier;
 
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.Classifier;
@@ -106,17 +107,18 @@ public class ModelGenerator {
         return m;
     }
 
-    public String evaluateModel(Classifier model, Instances traindataset, Instances testdataset) {
+    public Evaluation evaluateModel(Classifier model, Instances traindataset, Instances testdataset) {
         Evaluation eval = null;
         try {
             // Evaluate classifier with test dataset
             eval = new Evaluation(traindataset);
             eval.evaluateModel(model, testdataset);
+            eval.crossValidateModel(model, traindataset, 10, new Random(1));
             System.out.println("--- EVALUATE MODEL-----");
         } catch (Exception ex) {
             Logger.getLogger(ModelGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return eval.toSummaryString("", true);
+        return eval;
     }
 
     public void saveModel(Classifier model, String modelpath) {

@@ -1,11 +1,15 @@
 
 import ModelClassifier.ModelClassifier;
 import ModelClassifier.ModelGenerator;
+import java.io.BufferedReader;
 import java.io.File;
+import java.util.ArrayList;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.evaluation.Evaluation;
+import weka.core.Attribute;
 import weka.core.Debug;
 import weka.core.Instances;
 import weka.core.SelectedTag;
@@ -15,6 +19,7 @@ import weka.core.stemmers.LovinsStemmer;
 import weka.core.stemmers.Stemmer;
 import weka.core.stopwords.WordsFromFile;
 import weka.core.tokenizers.NGramTokenizer;
+import weka.filters.unsupervised.attribute.Normalize;
 
 /**
  * This is a classifier for wikihow dataset  
@@ -25,19 +30,23 @@ import weka.core.tokenizers.NGramTokenizer;
 public class Training {
 
     public static final String DATASETPATH = "D:\\GitHub\\parser\\data\\cleaned\\AllCategories.arff";
-    public static final String MODELPATH = "D:\\Downloads\\weka-example-master\\weka-example-master\\data\\";
+    public static final String DATASETPATHONE = "D:\\GitHub\\parser\\data\\cleaned\\OneCategorie.arff";
+    public static final String MODELPATH = "D:\\GitHub\\parser\\JavaApp\\MultiClass\\src\\data\\RANDOMFOREST.bin";
 
     public static void main(String[] args) throws Exception {
-        System.out.print("\n ---- START ----");
         int minTermFreq = 2;
         boolean useStemmer = false;
         boolean useIdf = true;
         int maxGrams = 2;
         int minGrams = 2;
+        Evaluation evalsummary = null;
         
         ModelGenerator mg = new ModelGenerator();
 
         Instances dataset = mg.loadDataset(DATASETPATH);
+        Instances data = mg.loadDataset(DATASETPATHONE);
+
+
 
         // -- Filter filter = new Normalize();
         StringToWordVector filter = new StringToWordVector();
@@ -64,82 +73,67 @@ public class Training {
         t.setNGramMinSize(minGrams);    
         filter.setTokenizer(t); 
         
-        // Stop Words
-        // -- WordsFromFile stopwords = new WordsFromFile();
-        // -- stopwords.setStopwords(new File("D:\\GitHub\\parser\\JavaApp\\MultiClass\\src\\data\\stopwords.txt"));
-        
-        // -- filter.setStopwordsHandler(stopwords);
+        // Use Stemmer
         if (useStemmer){
             Stemmer s = new /*Iterated*/LovinsStemmer();
             filter.setStemmer(s);
+            
+            // Stop Words
+            WordsFromFile stopwords = new WordsFromFile();
+            stopwords.setStopwords(new File("D:\\GitHub\\parser\\JavaApp\\MultiClass\\src\\data\\stopwords.txt"));
+            filter.setStopwordsHandler(stopwords);
         }
+        
         //Normalize dataset
         filter.setInputFormat(dataset);
+        filter.setInputFormat(data);
+        
         Instances datasetnor = Filter.useFilter(dataset, filter);
+        Instances dataFilter = Filter.useFilter(data, filter);
 
         Instances traindataset = new Instances(datasetnor, 0, trainSize);
         Instances testdataset = new Instances(datasetnor, trainSize, testSize);
-
-        System.out.print("\n ---- SMO MODEL ----");
-        // build classifier with train dataset             
-        SMO smo = (SMO) mg.buildClassifier(traindataset, "SMO");
-
-        // Evaluate classifier with test dataset
-        String evalsummary = mg.evaluateModel(smo, traindataset, testdataset);
-        System.out.println("Evaluation: " + evalsummary);
-
-        //Save model 
-        mg.saveModel(smo, MODELPATH+"SMO.bin");
-        System.out.print("\n ---- SAVE MODEL ----");
         
         
-        System.out.print("\n ---- RANDOM FOREST MODEL ----");
-        // build classifier with train dataset             
-        RandomForest randomForest = (RandomForest) mg.buildClassifier(traindataset, "RANDOMFOREST");
-
-        // Evaluate classifier with test dataset
-        evalsummary = "";
-        evalsummary = mg.evaluateModel(randomForest, traindataset, testdataset);
-        System.out.println("Evaluation: " + evalsummary);
-
-        //Save model 
-        mg.saveModel(randomForest, MODELPATH+"RANDOMFOREST.bin");
-        System.out.print("\n ---- SAVE MODEL ----");
-        
-        
-        System.out.print("\n ---- J48 MODEL ----");
-        // build classifier with train dataset             
-        J48 j48 = (J48) mg.buildClassifier(traindataset, "J48");
-
-        // Evaluate classifier with test dataset
-        evalsummary = "";
-        evalsummary = mg.evaluateModel(j48, traindataset, testdataset);
-        System.out.println("Evaluation: " + evalsummary);
-
-        //Save model 
-        mg.saveModel(j48, MODELPATH+"J48.bin");
-        System.out.print("\n ---- SAVE MODEL ----");
-        
-        
-        
-        System.out.print("\n ---- NAIVE BAYES MODEL ----");
-        // build classifier with train dataset             
-        NaiveBayes naiveBayes = (NaiveBayes) mg.buildClassifier(traindataset, "NAIVEBAYES");
-
-        // Evaluate classifier with test dataset
-        evalsummary = "";
-        evalsummary = mg.evaluateModel(naiveBayes, traindataset, testdataset);
-        System.out.println("Evaluation: " + evalsummary);
-
-        //Save model 
-        mg.saveModel(naiveBayes, MODELPATH+"NAIVEBAYES.bin");
-        System.out.print("\n ---- SAVE MODEL ----");
-        
+//        System.out.print("\n ---- SMO MODEL ----");
+//        // build classifier with train dataset             
+//        SMO smo = (SMO) mg.buildClassifier(traindataset, "SMO");
+//
+//        // Evaluate classifier with test dataset
+//        evalsummary = mg.evaluateModel(smo, traindataset, testdataset);
+//        System.out.println("Evaluation: " + evalsummary.toSummaryString("", true));
+//
+//        //Save model 
+//        mg.saveModel(smo, MODELPATH);
+//        System.out.print("\n ---- SAVE MODEL ----");
+//       
         
         //classifiy a single instance 
-        // -- ModelClassifier cls = new ModelClassifier();
-        // -- String classname = cls.classifiy(Filter.useFilter(cls.createInstance(1.6, 0.2, 0), filter), MODElPATH);
-        // -- System.out.println("\n The class name for the instance with petallength = 1.6 and petalwidth =0.2 is  " +classname);
+//        
+
+
+      
+        
+        ModelClassifier cls = new ModelClassifier();
+        
+        
+//        String classname = cls.classifiy(Filter.useFilter(cls.createInstance(
+//                "support art", 
+//                "art allow peopl public express fun creativ meaning way art music theatr provid countless creator ",
+//                "musician entertain livelihood without usa gov elect offici consid call legisl phone speak"), filter), MODELPATH);
+//        System.out.println("\n The class name for the instance TEST is: " +classname);
+        
+ 
+        
+        
+        
+
+
+        String classname = cls.classifiy(cls.createInstance(dataFilter), MODELPATH);
+        System.out.println("\n The class name for the instance TEST is: " +classname);
+        
+        
+        
         
         System.out.print("\n ---- FINISH ----");
 

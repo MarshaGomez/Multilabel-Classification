@@ -1,13 +1,19 @@
 package ModelClassifier;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.Classifier;
+import weka.classifiers.functions.MultilayerPerceptron;
+import weka.classifiers.trees.J48;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.trees.RandomForest;
+import weka.core.AbstractInstance;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instances;
+import weka.core.Instance;
 import weka.core.SerializationHelper;
 
 /**
@@ -64,24 +70,59 @@ public class ModelClassifier {
 
         attributes.add(new Attribute("class", classVal));
         dataRaw = new Instances("TestInstances", attributes, 0);
+        
+        // Select the Classificator Attribute
         dataRaw.setClassIndex(dataRaw.numAttributes()- 1);
     }
 
     
-    // -- public Instances createInstance(String TITLE, String SUMMARY, String TEXT, double result) {
-    // --     dataRaw.clear();
-    // --     String[] instanceValue1 = new String[]{TITLE, SUMMARY, TEXT};
-    // --     dataRaw.add(new DenseInstance(1.0, instanceValue1));
-    // --     return dataRaw;
-    // -- }
+    public Instances createInstance(Instances data) {
+        dataRaw.clear();
+        dataRaw.add(data.instance(0));
+        
+        
+        
+//        Instance data;
+//        data = new DenseInstance(3);
+//        
+//        data.setValue(attributes.get(1), TITLE);        
+//        data.setValue(attributes.get(2), SUMMARY);
+//        data.setValue(attributes.get(3), TEXT);
+//         
+//        dataRaw.add(data);
+//
+//
+//        dataRaw.clear();
+//        
+//        String[] values = new String[]{TITLE, SUMMARY, TEXT};
+//        dataRaw.add(new AbstractInstance(values));
+
+
+//            Instance instance = new DenseInstance(1);
+//            instance.setValue(1, SUMMARY);            
+//
+//            dataRaw.add(instance);
+        
+        return dataRaw;
+     }
 
 
     public String classifiy(Instances insts, String path) {
-        String result = "Not classified!!";
+        String result = "Not classified!";
         Classifier cls = null;
         try {
-            cls = (SMO) SerializationHelper.read(path);
+            cls = (RandomForest) SerializationHelper.read(path);
+            // System.out.println("Class predicted: " + cls);
+//            dataRaw.instance(0).setClassValue(cls.classifyInstance(dataRaw.instance(0)));
+//            double predicted;
+//            System.out.println("Class predicted: " + dataRaw.instance(0).toString());
+//            predicted = dataRaw.instance(0).classValue();
             result = classVal.get((int) cls.classifyInstance(insts.firstInstance()));
+
+           // result = classVal.get((int) cls.classifyInstance(insts.firstInstance()));
+            // double pred = cls.classifyInstance(dataRaw.instance(0));
+            System.out.println("Class predicted: " + result);
+
         } catch (Exception ex) {
             Logger.getLogger(ModelClassifier.class.getName()).log(Level.SEVERE, null, ex);
         }

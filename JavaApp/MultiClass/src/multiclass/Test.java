@@ -104,7 +104,7 @@ public class Test {
 
 	}
         
-        public static void main(String[] args) {
+        /* public static void main(String[] args) {
             System.out.println("Init MAIN");
             try {
                 System.out.println("Process Init");
@@ -112,5 +112,5 @@ public class Test {
             } catch (Exception e) {
                 System.err.println("Error"+e);
             }
-        }
+        } */
 }
