@@ -23,8 +23,9 @@ public class CreateArticle extends javax.swing.JFrame {
         jPanel1.setBackground(Color.WHITE);
         //jPanel2.setBackground(Color.BLACK);
 
-        
-        image1 = new ImageIcon(getClass().getResource("..\\img\\header_logo.png"));
+        image1 = new ImageIcon(getClass().getResource("../img/header_logo.png"));
+        //on windows uncomment below
+       // image1 = new ImageIcon(getClass().getResource("..\\img\\header_logo.png"));
         
         Image image = image1.getImage(); // transform it 
         Image newimg = image.getScaledInstance(150, 70,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  

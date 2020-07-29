@@ -21,7 +21,8 @@ public class Main extends javax.swing.JFrame {
     private ImageIcon image1;
     public Main() {
         initComponents();
-        image1 = new ImageIcon(getClass().getResource("..\\img\\WikiHow_logo.png"));
+        
+        image1 = new ImageIcon(getClass().getResource("../img/WikiHow_logo.png"));
         
         Image image = image1.getImage(); // transform it 
         Image newimg = image.getScaledInstance(922, 350,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
