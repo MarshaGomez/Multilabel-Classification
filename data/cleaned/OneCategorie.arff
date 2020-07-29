@@ -1,4 +1,4 @@
-@relation AllCategories-weka.filters.unsupervised.attribute.NominalToString-Cfirst-3
+@relation OneCategorie-weka.filters.unsupervised.attribute.NominalToString-Cfirst-3
 
 @attribute TITLE string
 @attribute SUMMARY string
